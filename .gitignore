@@ -1,3 +1,4 @@
 skills/personal/*
 
 .DS_STORE
+scripts/sync-agents-skills.local.sh
