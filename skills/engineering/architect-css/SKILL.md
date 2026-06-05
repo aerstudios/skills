@@ -8,7 +8,7 @@ argument-hint: "Describe the component and whether this is a new style system, a
 
 ## Quick Start
 
-```scss
+```css
 /* Good: Local tokens, logical properties, parent layout, strict accessibility */
 .container {
   /* Local component tokens mapped from global theme */
@@ -47,7 +47,7 @@ Produce maintainable, token-driven styles that:
 
 ## When to Use
 
-- building or refactoring component styles in `*.module.scss`
+- building or refactoring component styles in `*.module.css`
 - defining global theme tokens or component-level local theme variables
 - reviewing CSS for architectural consistency, modern CSS usage, and accessibility
 - evaluating or fixing layout (`gap`, `grid`), responsiveness (`@container`), or logical properties
