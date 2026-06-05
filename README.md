@@ -1,7 +1,7 @@
 # Skills For Real Engineers
 
 FORKED from
-[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)
+[/mattpocock/skills](https://github.com/mattpocock/skills)
 
 Sign up to his newsletter:
 
@@ -11,20 +11,9 @@ This has some skills removed from that repo, and some new ones added.
 
 ## Quickstart (30-second setup)
 
-1. Run the skills.sh installer:
+There are lots of ways of using these skills. Here's the quickest way to get started:
 
-```bash
-npx skills@latest add mattpocock/skills
-```
-
-1. Pick the skills you want, and which coding agents you want to install them on. **Make sure you select `/setup-matt-pocock-skills`**.
-
-2. Run `/setup-matt-pocock-skills` in your agent. It will:
-   - Ask you which issue tracker you want to use (GitHub, Linear, or local files)
-   - Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)
-   - Ask you where you want to save any docs we create
-
-3. Bam - you're ready to go.
+1. Clone this repo and then point your agent at it.
 
 ## Why These Skills Exist
 
