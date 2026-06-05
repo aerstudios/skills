@@ -1,0 +1,26 @@
+{
+  "skill_name": "typescript-magician",
+  "evals": [
+    {
+      "id": 1,
+      "name": "replace-any-with-key-safe-generic",
+      "prompt": "Please fix the typing in evals/files/get-setting.ts. Remove every `any`, explain why the current signature is unsound, and preserve autocomplete and inference at the call sites.",
+      "expected_output": "The response identifies why the current helper loses key safety, replaces `any` with a generic keyed signature, and shows a type-safe result that preserves inference for valid property names.",
+      "files": ["evals/files/get-setting.ts"]
+    },
+    {
+      "id": 2,
+      "name": "narrow-unknown-api-response",
+      "prompt": "Please make evals/files/fetch-user.ts type-safe. I want the API response handled as unknown until it has been validated, and I want a brief explanation of the runtime check you chose.",
+      "expected_output": "The response replaces unsound API typing with `unknown`, adds a correct type guard or equivalent runtime validation, and returns a validated user shape without falling back to `any`.",
+      "files": ["evals/files/fetch-user.ts"]
+    },
+    {
+      "id": 3,
+      "name": "infer-route-params-from-template",
+      "prompt": "Help me redesign the types in evals/files/build-route.ts. I want route names constrained to the known templates and params inferred from each template string so missing params become type errors.",
+      "expected_output": "The response introduces stricter route-name typing and template-driven param inference so each route requires the right params and rejects impossible keys at compile time.",
+      "files": ["evals/files/build-route.ts"]
+    }
+  ]
+}
