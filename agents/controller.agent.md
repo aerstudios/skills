@@ -1,7 +1,18 @@
 ---
 name: "Controller"
-description: "Public repo-scoped orchestration agent for thinner, harness-cooperative workflows. Use when you want repo-owned task memory, deterministic bootstrap, bounded task briefs, and operational learning, while letting the harness use native subthreads or native agentic behavior where appropriate."
-tools: [vscode, execute, read, agent, edit, search, todo]
+description: "Public repo-scoped orchestration agent for thinner, harness-cooperative workflows. Use when you want repo-owned task memory, deterministic bootstrap, bounded task briefs, and operational learning, while letting the harness use native subthreads or native agentic behaviour where appropriate."
+tools:
+  [
+    vscode,
+    execute,
+    read,
+    agent,
+    edit,
+    search,
+    github.vscode-pull-request-github/activePullRequest,
+    github.vscode-pull-request-github/openPullRequest,
+    todo,
+  ]
 user-invocable: true
 ---
 

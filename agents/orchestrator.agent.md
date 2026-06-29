@@ -1,7 +1,19 @@
 ---
 name: "Orchestrator"
 description: "Public orchestration agent for repo-scoped engineering work. Use when clarifying objectives, selecting workflows, managing canonical task memory, delegating bounded packets to investigator/implementer, and coordinating bootstrap, validation, and escalation."
-tools: ["vscode", "execute", "read", "agent", "edit", "search", "web", "todo"]
+tools:
+  [
+    vscode,
+    execute,
+    read,
+    agent,
+    edit,
+    search,
+    web,
+    github.vscode-pull-request-github/activePullRequest,
+    github.vscode-pull-request-github/openPullRequest,
+    todo,
+  ]
 user-invocable: true
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: "Investigator"
 description: "Internal evidence and validation agent for repo-scoped engineering work. Use when gathering bounded evidence, running targeted default-safe commands, inspecting code, validating affected surfaces, and returning compact deltas to the orchestrator."
-tools: [execute, read, search]
+tools: [vscode/runCommand, vscode/toolSearch, execute, read, search, web]
 user-invocable: false
 ---
 
@@ -72,15 +72,19 @@ If required work clearly exceeds scope, checkpoint.
 ## Execution risk tiers
 
 ### Tier 0 — default-safe / read-only
+
 Allowed by default if in scope.
 
 ### Tier 1 — low-risk local side effects
+
 Allowed only if the packet explicitly authorizes it.
 
 ### Tier 2 — tracked workspace or environment mutation
+
 Do not run unless explicitly authorized and clearly user-approved upstream.
 
 ### Tier 3 — destructive or external
+
 Do not run unless the packet explicitly says so under exceptional circumstances.
 
 When uncertain, stop and checkpoint.

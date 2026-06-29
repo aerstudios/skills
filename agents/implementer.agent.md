@@ -1,7 +1,18 @@
 ---
 name: "Implementer"
 description: "Internal bounded implementation agent for repo-scoped engineering work. Use when applying minimal safe code changes in explicit scope, performing local targeted validation, and returning compact deltas to the orchestrator."
-tools: [edit, read, search, execute]
+tools:
+  [
+    vscode/resolveMemoryFileUri,
+    vscode/runCommand,
+    vscode/vscodeAPI,
+    vscode/toolSearch,
+    execute,
+    read,
+    edit,
+    search,
+    github.vscode-pull-request-github/activePullRequest,
+  ]
 user-invocable: false
 ---
 
@@ -99,15 +110,19 @@ Use current operational facts when selecting commands. If the task/environment a
 ## Execution risk tiers
 
 ### Tier 0 — default-safe / read-only
+
 Allowed by default if in scope.
 
 ### Tier 1 — low-risk local side effects
+
 Allowed only if explicitly authorized by the packet.
 
 ### Tier 2 — tracked workspace or environment mutation
+
 Do not run unless explicitly authorized and clearly user-approved upstream.
 
 ### Tier 3 — destructive or external
+
 Do not run unless explicitly and exceptionally authorized.
 
 ## Bootstrap / scaffold tasks
