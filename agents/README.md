@@ -4,7 +4,8 @@ These agent prompts are the installed runtime surface for the orchestration syst
 
 They exist alongside the reusable skills, but serve a different purpose:
 
-- `orchestrator.agent.md` — public entry point for repo-scoped orchestration
+- `orchestrator.agent.md` — public entry point for the full custom multi-agent runtime
+- `controller.agent.md` — public entry point for the thinner harness-cooperative runtime
 - `investigator.agent.md` — internal evidence and validation agent
 - `implementer.agent.md` — internal bounded implementation agent
 
@@ -55,9 +56,56 @@ This system does add some overhead through:
 
 That overhead is intentional. The goal is not to make every task cheaper in raw tokens, especially trivial ones. The goal is to make token spend **more controlled, inspectable, and reusable** over multi-turn work and shareable with the team.
 
+## Runtime modes
+
+### `orchestrator.agent.md`
+Use this when you want the full custom multi-agent runtime.
+
+Characteristics:
+
+- explicit runtime roles
+- custom `investigator` and `implementer`
+- portable across harnesses
+- strongest fit for environments where custom sub-agents can be routed independently
+- best when explicit role separation matters more than harness-native optimization
+
+### `controller.agent.md`
+Use this when you want a thinner harness-cooperative runtime.
+
+Characteristics:
+
+- one public controller
+- same repo-owned task memory, bootstrap, workflow discipline, and operational learning
+- bounded briefs instead of relying on explicit custom runtime `investigator` / `implementer` threads
+- better fit for harnesses where native subthreads/subagents outperform custom agent routing
+
+## Shared foundation
+
+Both modes share the same core value layer:
+
+- deterministic bootstrap
+- repo-local task memory
+- `OperationalFacts`
+- workflow contracts
+- bounded task shaping
+- compaction discipline
+- eval-oriented design
+
+The difference is not in the memory or process model. The difference is in how much runtime work is delegated to the harness itself.
+
+## Which one should I use?
+
+Use:
+
+- **`orchestrator`** for the fuller custom system
+- **`controller`** for the thinner harness-cooperative system
+
+If you are unsure, start with the mode that best matches the harness behavior you actually observe, not the one with the more elegant theory.
+
 ## Further reading
 
 - [Orchestrator Agent](orchestrator.agent.md)
+- [Controller Agent](controller.agent.md)
 - [Investigator Agent](investigator.agent.md)
 - [Implementer Agent](implementer.agent.md)
 - [Anthropics Orchestration System](https://docs.anthropic.com/claude/docs/orchestration)
