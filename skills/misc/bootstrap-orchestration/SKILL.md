@@ -33,7 +33,7 @@ Do not use this skill when:
 2. Run the deterministic script in check mode:
    - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check`
 3. Classify the result as missing, partial, current, or outdated.
-4. Ask when repo-visible mutation is needed.
+4. Ask when repo-visible mutation is needed, unless the user's direct request explicitly asked to bootstrap or repair the repo.
 5. If mutation is approved, run the deterministic script in apply mode:
    - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply`
 6. Report exactly what changed and what did not from the JSON result.
@@ -51,5 +51,7 @@ Do not hand-write scaffold files when the script can perform the operation.
 - JSON is the default and only output mode in v1.
 - `--mode check` must not mutate the target root.
 - `--mode apply` creates or repairs the scaffold conservatively.
+- `--mode apply` is a repo-visible mutation and requires explicit approval unless bootstrap/repair was the user's direct request.
 - Existing differing stub files are preserved and reported as warnings.
+- Existing dynamic index files are valid when they contain the minimum required fields, even if their task or knowledge contents have changed.
 - The managed `.gitignore` block for `.agents/state/` is always maintained by the script.

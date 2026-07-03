@@ -106,6 +106,25 @@ def normalize_json(obj: Any) -> str:
     return json.dumps(obj, indent=2, sort_keys=False) + "\n"
 
 
+def has_required_keys(parsed: Any, keys: list[str]) -> bool:
+    return isinstance(parsed, dict) and all(key in parsed for key in keys)
+
+
+def is_valid_dynamic_index(rel: str, actual: str) -> bool:
+    try:
+        parsed = json.loads(actual)
+    except Exception:
+        return False
+
+    if rel == ".agents/knowledge/index.json":
+        return has_required_keys(parsed, ["version", "entries"])
+
+    if rel == ".agents/state/index.json":
+        return has_required_keys(parsed, ["version", "nextTaskSequence", "tasksByStatus", "activeLocks"])
+
+    return False
+
+
 def required_files() -> dict[str, str]:
     return {
         ".agents/system/manifest.json": normalize_json(build_manifest()),
@@ -113,6 +132,10 @@ def required_files() -> dict[str, str]:
         ".agents/knowledge/index.json": normalize_json(build_knowledge_index()),
         ".agents/state/index.json": normalize_json(build_state_index()),
     }
+
+
+def is_dynamic_index(rel: str) -> bool:
+    return rel in {".agents/knowledge/index.json", ".agents/state/index.json"}
 
 
 def find_git_root(root: Path) -> Path | None:
@@ -141,11 +164,17 @@ def classify_scaffold(root: Path, warnings: list[str]) -> str:
 
     for path, expected in required_file_map.items():
         if path.exists() and path.is_file():
+            rel = str(path.relative_to(root))
             try:
                 actual = path.read_text(encoding="utf-8")
             except Exception:
                 warnings.append(f"Could not read existing file for comparison: {path.relative_to(root)}")
                 mismatched = True
+                continue
+            if is_dynamic_index(rel):
+                if not is_valid_dynamic_index(rel, actual):
+                    warnings.append(f"Existing dynamic index is not valid: {path.relative_to(root)}")
+                    mismatched = True
                 continue
             if path.name == "manifest.json":
                 try:
@@ -235,6 +264,13 @@ def ensure_file(root: Path, rel: str, content: str, changed: dict[str, Any], pre
             actual = path.read_text(encoding="utf-8")
         except Exception:
             warnings.append(f"Could not read existing file, preserved: {rel}")
+            preserved["existingFiles"].append(rel)
+            return
+        if is_dynamic_index(rel):
+            if is_valid_dynamic_index(rel, actual):
+                preserved["existingFiles"].append(rel)
+                return
+            warnings.append(f"Existing dynamic index is invalid and was preserved: {rel}")
             preserved["existingFiles"].append(rel)
             return
         if rel.endswith("manifest.json"):

@@ -44,6 +44,8 @@ You may not:
 - mutate canonical task memory directly
 - run side-effecting commands unless explicitly authorized by the packet and allowed by risk tier
 
+The packet must name `maxRiskTier`, `authorizedCommandsOrPatterns`, `sideEffectsAllowed`, and `userApprovalReference`. If any needed command is not covered, checkpoint instead of inferring permission.
+
 ## Relationship to the orchestrator
 
 The `orchestrator` owns:
@@ -133,15 +135,18 @@ Return a checkpoint instead of continuing when:
 
 ## Required response shape
 
-Return exactly:
+Return the shared response envelope exactly:
 
-1. Scope
-2. Findings
-3. Clustering
-4. Confidence
-5. Next best action
-6. Shared memory delta
-7. Compression note
+1. `taskId`
+2. `status`: `completed`, `checkpoint`, `blocked`, or `failed`
+3. `confidence`: `low`, `medium`, or `high`
+4. `summary`
+5. `rolePayload`: include `scope`, `findings`, `clustering`, and validation detail when relevant
+6. `memoryDelta`
+7. `blockers`
+8. `nextAction`
+9. `compressionNote`
+10. `budgetStatus`
 
 ## Shared memory delta
 
@@ -153,6 +158,7 @@ Return only net-new information, using these keys as relevant:
 - `Validation`
 - `Blockers`
 - `OperationalFacts`
+- `PromotionCandidates`
 
 Operational facts should be structured and lightweight. Tag them with a small environment fingerprint and treat them as hard temporary rules within the current task/environment until superseded.
 

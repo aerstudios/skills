@@ -37,6 +37,11 @@ Every packet should include:
 - `acceptanceCriteria`
 - `relevantContext`
 - `budgetMode`
+- `maxRiskTier`
+- `authorizedCommandsOrPatterns`
+- `sideEffectsAllowed`
+- `userApprovalReference`
+- `knowledgePromotionAllowed`
 - `requiredOutputSchema`
 
 ### Modes
@@ -45,6 +50,19 @@ Every packet should include:
 - `fix`
 - `validate`
 - `clarify-support`
+- `maintenance`
+
+### Authorization fields
+
+Command-running packets must be explicit enough for a small model to follow literally.
+
+- `maxRiskTier`: highest allowed execution tier, from `0` to `3`
+- `authorizedCommandsOrPatterns`: exact commands or narrow command patterns the sub-agent may run; use an empty list when no command execution is allowed
+- `sideEffectsAllowed`: whether the packet permits local side effects
+- `userApprovalReference`: short note proving approval for repo-visible mutation, or `null` when not applicable
+- `knowledgePromotionAllowed`: whether the agent may write committed `.agents/knowledge/**` entries, normally `false`
+
+If a needed command or mutation is not covered by these fields, the sub-agent must checkpoint instead of inferring permission from prose.
 
 ## Investigator packet extensions
 
@@ -65,18 +83,22 @@ Every packet should include:
 
 Sub-agent outputs are schema-first but tolerant.
 
-Required minimum fields for all responses:
+All sub-agent responses should use this shared envelope:
 
-- task ID
-- status
-- findings or changes
-- confidence
-- next action recommendation
-- memory delta
-- blockers
-- compression note
+- `taskId`
+- `status`: `completed`, `checkpoint`, `blocked`, or `failed`
+- `confidence`: `low`, `medium`, or `high`
+- `summary`
+- `rolePayload`: role-specific findings, changes, or validation detail
+- `memoryDelta`
+- `blockers`
+- `nextAction`
+- `compressionNote`
+- `budgetStatus`
 
 Sub-agent memory deltas may also include `OperationalFacts` for environment and tooling discoveries that affect future command choice.
+
+If a sub-agent discovers durable team-useful knowledge, it should return that as a memory delta or promotion candidate. The `orchestrator` records promotion candidates in task state or closure. It writes committed `.agents/knowledge/**` entries only during an explicit curation/update flow or when `knowledgePromotionAllowed` is true.
 
 ## Packet sizing guidance
 
@@ -86,6 +108,13 @@ Budget modes:
 - `lean`
 - `standard`
 - `deep`
+
+Default interpretation:
+
+- `micro`: trivial or one-file/symbol work; usually no persistent task state
+- `lean`: small repo inspection, one bounded change or validation
+- `standard`: multi-step work that needs task state, delegation, or independent validation
+- `deep`: ambiguous architecture, multi-slice work, repeated failure, or high blast radius
 
 Use the lightest mode compatible with correctness. `deep` is not a license to dump the full conversation into the packet.
 

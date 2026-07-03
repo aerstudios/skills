@@ -78,24 +78,30 @@ The canonical memory model is a small typed graph.
 
 Operational environment/tooling discoveries are tracked as a first-class state section called `OperationalFacts`, not as graph nodes in v1.
 
+Durable team-useful discoveries that will help future repo work should be recorded as `promotionCandidates` in task state or closure. Committed `.agents/knowledge/**` writes happen only during an explicit curation/update flow or when knowledge promotion is allowed for the task. The git diff is the human review gate.
+
 ### Allowed edge types
 
 Structural:
+
 - `parent_of`
 - `depends_on`
 
 Reasoning/provenance:
+
 - `derived_from`
 - `supports`
 - `contradicts`
 - `supersedes`
 
 Execution/verification:
+
 - `implemented_by`
 - `tests`
 - `blocks`
 
 Versioning:
+
 - `variant_of`
 
 ## Active view
@@ -151,6 +157,7 @@ Operational facts should:
 - be tagged with a lightweight environment fingerprint
 - become hard temporary rules within the current task/environment
 - be cleared or superseded when the environment changes or new evidence overrides them
+- become promotion candidates only when they are durable enough to help future teammates, not merely useful to the current task
 
 Suggested shape:
 

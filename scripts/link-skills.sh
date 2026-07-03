@@ -11,7 +11,7 @@ DEST="$HOME/.claude/skills"
 # writing the per-skill symlinks back into the repo's own skills/ tree. Detect
 # and bail out instead of polluting the working copy.
 if [ -L "$DEST" ]; then
-  resolved="$(readlink -f "$DEST")"
+  resolved="$(python3 -c 'import pathlib, sys; print(pathlib.Path(sys.argv[1]).resolve())' "$DEST")"
   case "$resolved" in
     "$REPO"|"$REPO"/*)
       echo "error: $DEST is a symlink into this repo ($resolved)." >&2
@@ -30,7 +30,9 @@ while IFS= read -r -d '' skill_md; do
   target="$DEST/$name"
 
   if [ -e "$target" ] && [ ! -L "$target" ]; then
-    rm -rf "$target"
+    echo "error: $target exists and is not a symlink; refusing to remove it" >&2
+    echo "Move it aside or remove it manually, then re-run." >&2
+    exit 1
   fi
 
   ln -sfn "$src" "$target"

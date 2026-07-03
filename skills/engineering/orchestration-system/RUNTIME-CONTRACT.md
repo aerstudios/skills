@@ -49,6 +49,8 @@ If they are:
 - History is append-mostly and uses supersession rather than hidden rewrite.
 - Persist task state after every meaningful state-changing event.
 - Default to a new task unless resume or fork is strongly justified.
+- Durable team-useful discoveries are recorded as promotion candidates in task state or closure.
+- Committed `.agents/knowledge/**` writes happen only during an explicit curation/update flow or when the packet allows knowledge promotion; the git diff is the review gate.
 
 ## Sub-agent contract
 
@@ -97,13 +99,35 @@ If the runtime or delegation layer supports per-agent or per-call model selectio
 
 If model routing is unavailable or cannot be confirmed, continue with the default runtime model and preserve the same workflow and packet discipline.
 
+## Budget modes
+
+Use the lightest mode compatible with correctness:
+
+- `micro`: trivial or one-file/symbol work; usually no persistent task state
+- `lean`: small repo inspection, one bounded change or validation
+- `standard`: multi-step work that needs task state, delegation, or independent validation
+- `deep`: ambiguous architecture, multi-slice work, repeated failure, or high blast radius
+
 ## Workflow and escalation rules
 
 - Use the explicit workflow library by default.
 - Operate with bounded autonomy.
 - Do not exceed 2 fix/validate loops per cluster before escalation.
+- Ask the user only when at least two plausible solution paths remain and the answer would materially change the plan, artifact, or validation strategy.
 - Ask the user when architectural choice, unresolved intent ambiguity, or persistent blockers remain.
 - Prefer small outcome-based task packets over atomic micromanagement.
+
+## Packet authorization
+
+Packets that permit command execution or mutation must include:
+
+- `maxRiskTier`
+- `authorizedCommandsOrPatterns`
+- `sideEffectsAllowed`
+- `userApprovalReference`
+- `knowledgePromotionAllowed`
+
+Bootstrap `check` can run as risk tier 0 when in scope. Bootstrap `apply` is risk tier 2 and requires explicit approval unless the user's direct request already asked to bootstrap or repair the repo.
 
 ## Local override boundaries
 

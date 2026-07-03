@@ -22,6 +22,7 @@ It provides:
 - **bounded roles** for orchestration, investigation, and implementation
 - **deterministic bootstrap/setup** for repo-local state
 - **inspectable artifacts** humans can review and evolve
+- **promotion candidates** for durable team-useful discoveries, which can be curated into repo-local knowledge through explicit update flows
 - **portable process logic** that is less tied to one harness or provider
 
 In short:
@@ -58,7 +59,20 @@ That overhead is intentional. The goal is not to make every task cheaper in raw 
 
 ## Runtime modes
 
+Both public modes should preserve the same governance contract wherever possible:
+
+- clarify intent only when the answer would materially change the plan
+- own canonical repo-local task memory
+- maintain `OperationalFacts` separately from product/code evidence
+- record stable, team-useful discoveries as promotion candidates
+- formalize task state, delegation instructions, memory deltas, validation records, and closure records
+- keep hot context compact and archive cold provenance
+- choose the lightest budget mode compatible with correctness
+
+The difference is execution substrate, not philosophy.
+
 ### `orchestrator.agent.md`
+
 Use this when you want the full custom multi-agent runtime.
 
 Characteristics:
@@ -67,9 +81,10 @@ Characteristics:
 - custom `investigator` and `implementer`
 - portable across harnesses
 - strongest fit for environments where custom sub-agents can be routed independently
-- best when explicit role separation matters more than harness-native optimization
+- best when explicit role separation is useful and custom sub-agents do not introduce observed downsides
 
 ### `controller.agent.md`
+
 Use this when you want a thinner harness-cooperative runtime.
 
 Characteristics:
@@ -77,7 +92,7 @@ Characteristics:
 - one public controller
 - same repo-owned task memory, bootstrap, workflow discipline, and operational learning
 - bounded briefs instead of relying on explicit custom runtime `investigator` / `implementer` threads
-- better fit for harnesses where native subthreads/subagents outperform custom agent routing
+- better fit when harness-native execution gives an actual advantage: lower coordination overhead, better native model routing, fewer tool restrictions, lower latency, or simpler execution for a small task
 
 ## Shared foundation
 
@@ -97,10 +112,12 @@ The difference is not in the memory or process model. The difference is in how m
 
 Use:
 
-- **`orchestrator`** for the fuller custom system
-- **`controller`** for the thinner harness-cooperative system
+- **`orchestrator`** when explicit custom sub-agents are available and useful for the task
+- **`controller`** when harness-native execution is measurably simpler, cheaper, or better routed for the task
 
-If you are unsure, start with the mode that best matches the harness behavior you actually observe, not the one with the more elegant theory.
+If you are unsure and the harness supports custom sub-agents well, start with `orchestrator`. Switch to `controller` only when custom sub-agents add real cost, latency, routing friction, or unnecessary coordination for the work in front of you.
+
+The system is expected to show the most value on complex, multi-step, or multi-turn tasks. Trivial one-shot edits should stay light and may not need persistent task state.
 
 ## Further reading
 
@@ -108,5 +125,5 @@ If you are unsure, start with the mode that best matches the harness behavior yo
 - [Controller Agent](controller.agent.md)
 - [Investigator Agent](investigator.agent.md)
 - [Implementer Agent](implementer.agent.md)
-- [Anthropics Orchestration System](https://docs.anthropic.com/claude/docs/orchestration)
 - [When you use MAS and when you don't](https://claude.com/blog/building-multi-agent-systems-when-and-how-to-use-them)
+- [Pi subagents](https://github.com/nicobailon/pi-subagents/tree/main)

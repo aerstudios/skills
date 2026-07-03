@@ -153,6 +153,7 @@ Expected behavior:
 - do not duplicate directories or managed ignore blocks
 - fill in missing required pieces
 - preserve existing valid files
+- validate `.agents/state/index.json` and `.agents/knowledge/index.json` by minimum required fields, not exact stub bytes
 - preserve differing existing stub files and report warnings instead of overwriting them in v1
 - report which pieces already existed
 - ask before overwriting, renaming, or migrating existing curated content

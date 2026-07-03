@@ -165,7 +165,8 @@ Contains:
 Written by:
 
 - humans or explicit curation flows
-- not by automatic runtime promotion in v1
+- approved knowledge-promotion flows where the git diff is the review gate
+- not by ordinary runtime task execution in v1
 
 ## Memory architecture
 

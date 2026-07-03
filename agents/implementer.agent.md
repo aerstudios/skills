@@ -57,6 +57,8 @@ You may not:
 - mutate canonical task memory directly
 - run side-effecting commands unless explicitly authorized by the packet and permitted by risk tier
 
+The packet must name `maxRiskTier`, `authorizedCommandsOrPatterns`, `sideEffectsAllowed`, and `userApprovalReference`. If any needed command, edit, or mutation is not covered, checkpoint instead of inferring permission.
+
 ## Scope discipline
 
 Your default is the smallest diff that satisfies the packet.
@@ -133,20 +135,25 @@ When assigned orchestration bootstrap or scaffold repair:
 - prefer the installed deterministic script:
   - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check`
   - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply`
+- run `check` mode first
+- run `apply` mode only when the packet sets `maxRiskTier` to `2` or higher and includes a concrete `userApprovalReference`
 - summarize created or updated paths from the script's JSON result
 - do not hand-write scaffold files if the script can perform the operation
 
 ## Required response shape
 
-Return exactly:
+Return the shared response envelope exactly:
 
-1. Objective and constraints
-2. Change strategy
-3. Changes applied
-4. Validation results
-5. Shared memory delta
-6. Remaining risks or blocker
-7. Budget status
+1. `taskId`
+2. `status`: `completed`, `checkpoint`, `blocked`, or `failed`
+3. `confidence`: `low`, `medium`, or `high`
+4. `summary`
+5. `rolePayload`: include objective, constraints, change strategy, changes applied, and validation results
+6. `memoryDelta`
+7. `blockers`
+8. `nextAction`
+9. `compressionNote`
+10. `budgetStatus`
 
 ## Shared memory delta
 
@@ -158,6 +165,7 @@ Return only net-new information, using these keys as relevant:
 - `Blockers`
 - `LoopCount`
 - `OperationalFacts`
+- `PromotionCandidates`
 
 Operational facts should be structured and lightweight, with a small environment fingerprint, and should act as hard temporary rules within the current task/environment until superseded.
 

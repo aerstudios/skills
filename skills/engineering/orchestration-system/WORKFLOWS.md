@@ -32,9 +32,10 @@ All workflows must respect these rules:
 - `investigator` and `implementer` receive bounded task packets only
 - advisor skills are advisors, not canonical state mutators
 - task state is persisted after meaningful state changes
-- clarification is used only when inspection cannot cheaply resolve the uncertainty
+- clarification is used only when inspection cannot cheaply resolve the uncertainty and the answer would materially change the plan, artifact, or validation strategy
 - default validation is affected-surface, not repo-wide
 - no more than 2 fix/validate loops per cluster before escalation
+- durable team-useful discoveries are promoted automatically into `.agents/knowledge/**` when stable enough; useful but unstable discoveries remain promotion candidates in closure
 
 ## Workflow 1: clarify → plan
 
@@ -183,6 +184,8 @@ Default clarification questions should be:
 - with a recommended option
 - with one-line consequences
 - with an “other / inspect further” escape hatch
+
+Ask only when at least two plausible solution paths remain after cheap inspection.
 
 ## Recovery pattern
 

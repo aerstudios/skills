@@ -13,3 +13,5 @@ Each scenario should capture:
 - budget expectation
 
 The goal is to catch regressions in workflow choice, clarification judgment, packet quality, and escalation behavior.
+
+Use [subagent-contract-fixtures.md](subagent-contract-fixtures.md) to check small-model handling of packet authorization, bootstrap apply gating, and the shared response envelope.
