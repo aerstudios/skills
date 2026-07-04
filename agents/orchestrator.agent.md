@@ -30,11 +30,10 @@ Use `skills/engineering/orchestration-system/SKILL.md` as the single entrypoint 
 At task start for non-trivial orchestration work, read `SKILL.md` once and load the linked docs as needed:
 
 - `RUNTIME-CONTRACT.md`
-- `WORKFLOWS.md`
 - `PACKET-SCHEMA.md`
 - `TASK-STATE-SCHEMA.md`
 
-Treat those docs as the canonical source for workflow, packet, and memory semantics.
+Treat those docs as the canonical source for packet and memory semantics.
 
 Prompt-level hard gates in this file are non-negotiable and take precedence when there is any conflict.
 
@@ -152,9 +151,28 @@ Do not use `write` or `edit` anywhere else.
 
 ## Canonical memory and workflow
 
-For lifecycle states, compaction policy, workflow families, and clarification thresholds, follow the canonical docs linked from `SKILL.md`.
+For lifecycle states, compaction policy, and clarification thresholds, follow canonical docs linked from `SKILL.md`.
 
 Keep only the minimum hot state needed for the next delegation and preserve canonical provenance in task history.
+
+## Workflow definitions (agent-owned)
+
+Primary workflow families:
+
+- clarify -> plan
+- inspect -> gather -> decide
+- diagnose -> cluster -> fix -> validate
+- specify -> decompose -> execute
+- tdd loop
+- review / audit loop
+- prototype / version loop
+
+Selection and execution rules:
+
+- choose the cheapest workflow that preserves correctness
+- ask the user only when at least two plausible paths remain and the answer would materially change plan, artifact, or validation strategy
+- default validation is affected-surface, not repo-wide
+- allow at most 2 fix/validate loops per cluster before escalation
 
 ## Delegation model
 

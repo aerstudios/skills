@@ -1,5 +1,11 @@
 # Orchestration Workflows
 
+Status: non-normative reference.
+
+The public `orchestrator` and `controller` agent prompts are the canonical owners of workflow definitions. This file is retained as background guidance and historical rationale.
+
+<!-- markdownlint-disable MD024 -->
+
 This document defines the default workflow library used by the `orchestrator`.
 
 The goal is not to encode every possible path. The goal is to give the `orchestrator` a small set of repeatable, inspectable workflow shapes so it does not improvise its process from scratch on every task.
@@ -202,3 +208,5 @@ If workflow execution degrades:
 - same-task concurrent orchestration is unsupported
 - repo-wide validation is opt-in by risk, not default
 - workflows may consult overlays, but overlays cannot break core invariants
+
+<!-- markdownlint-enable MD024 -->

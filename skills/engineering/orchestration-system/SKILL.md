@@ -34,9 +34,12 @@ Normative runtime docs:
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [RUNTIME-CONTRACT.md](./RUNTIME-CONTRACT.md)
-- [WORKFLOWS.md](./WORKFLOWS.md)
 - [PACKET-SCHEMA.md](./PACKET-SCHEMA.md)
 - [TASK-STATE-SCHEMA.md](./TASK-STATE-SCHEMA.md)
+
+Optional reference docs:
+
+- [WORKFLOWS.md](./WORKFLOWS.md) (non-normative background; public agent prompts own workflow definitions)
 
 ## Invariants
 
