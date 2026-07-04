@@ -1,162 +1,146 @@
 # Task Packet Schema
 
-This document defines the bounded task packets used by the `orchestrator` to delegate work to `investigator` and `implementer`.
+This document defines bounded task packets used by the `orchestrator` to delegate work to `investigator` and `implementer`.
 
-The packet model exists to:
+## Packet aim
 
-- keep delegation small and explicit
-- prevent sub-agent scope drift
-- reduce repeated interpretation of the original user request
-- make sub-agent outputs easier to normalize into canonical memory
-- support budget-aware orchestration
+Each packet should be a small, outcome-oriented instruction that:
 
-## Design principles
+- constrains scope and risk
+- makes authorization explicit
+- gives enough context to execute safely
+- produces output that is easy to merge into canonical task memory
 
-Task packets should be:
+Use the lightest packet that can still succeed safely.
 
-- bounded
-- outcome-oriented
-- cheap to generate
-- easy to validate
-- role-aware
-- small enough to fit budget targets without losing necessary constraints
+## Canonical packet JSON
 
-The default unit is a small outcome-based task, not a micromanaged atomic instruction.
+```json
+{
+    "taskId": "tsk_042",
+    "parentTaskId": "tsk_041",
+    "clusterId": "cluster_bootstrap",
+    "mode": "maintenance",
+    "objective": "Verify and, if approved, repair missing orchestration scaffold",
+    "scope": {
+        "paths": [".agents/**", ".gitignore"],
+        "outOfScope": ["product code", "tests", "build config"]
+    },
+    "constraints": [
+        "No product-code edits",
+        "Prefer deterministic bootstrap script"
+    ],
+    "acceptanceCriteria": [
+        "Check result recorded",
+        "Apply only with explicit approval"
+    ],
+    "relevantContext": [
+        "Repo root resolved to nearest git root",
+        "Previous check reported missing .agents/system"
+    ],
+    "budgetMode": "lean",
+    "maxRiskTier": 2,
+    "authorizedCommandsOrPatterns": [
+        "python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check",
+        "python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply"
+    ],
+    "sideEffectsAllowed": true,
+    "userApprovalReference": "User approved apply in current turn",
+    "knowledgePromotionAllowed": false,
+    "requiredOutputSchema": "shared-response-envelope-v1"
+}
+```
 
-## Base packet schema
+## Field reference
 
-Every packet should include:
+- `taskId`: current task identifier.
+- `parentTaskId`: parent task if this packet is part of a branch; otherwise `null`.
+- `clusterId`: logical work cluster within the task.
+- `mode`: one of `gather`, `fix`, `validate`, `clarify-support`, `maintenance`.
+- `objective`: single-sentence desired outcome.
+- `scope`: allowed target area plus explicit out-of-scope boundaries.
+- `constraints`: non-negotiable rules for this packet.
+- `acceptanceCriteria`: concrete pass conditions.
+- `relevantContext`: minimal context slice needed for execution.
+- `budgetMode`: one of `micro`, `lean`, `standard`, `deep`.
+- `maxRiskTier`: highest allowed risk tier (`0` to `3`).
+- `authorizedCommandsOrPatterns`: exact commands or narrow patterns allowed.
+- `sideEffectsAllowed`: whether local side effects are allowed.
+- `userApprovalReference`: proof of approval for repo-visible mutation, or `null`.
+- `knowledgePromotionAllowed`: whether committed `.agents/knowledge/**` writes are allowed.
+- `requiredOutputSchema`: required response envelope identifier.
 
-- `taskId`
-- `parentTaskId`
-- `clusterId`
-- `mode`
-- `objective`
-- `scope`
-- `constraints`
-- `acceptanceCriteria`
-- `relevantContext`
-- `budgetMode`
-- `maxRiskTier`
-- `authorizedCommandsOrPatterns`
-- `sideEffectsAllowed`
-- `userApprovalReference`
-- `knowledgePromotionAllowed`
-- `requiredOutputSchema`
+## Authorization rules
 
-### Modes
+If a required command or mutation is not explicitly covered by `maxRiskTier`, `authorizedCommandsOrPatterns`, `sideEffectsAllowed`, and `userApprovalReference`, the sub-agent must `checkpoint`.
 
-- `gather`
-- `fix`
-- `validate`
-- `clarify-support`
-- `maintenance`
+Bootstrap rules:
 
-### Authorization fields
+- `check` can run as tier 0 when in scope.
+- `apply` is tier 2 and requires explicit approval unless the user directly requested bootstrap/repair.
 
-Command-running packets must be explicit enough for a small model to follow literally.
+## Role extensions
 
-- `maxRiskTier`: highest allowed execution tier, from `0` to `3`
-- `authorizedCommandsOrPatterns`: exact commands or narrow command patterns the sub-agent may run; use an empty list when no command execution is allowed
-- `sideEffectsAllowed`: whether the packet permits local side effects
-- `userApprovalReference`: short note proving approval for repo-visible mutation, or `null` when not applicable
-- `knowledgePromotionAllowed`: whether the agent may write committed `.agents/knowledge/**` entries, normally `false`
-
-If a needed command or mutation is not covered by these fields, the sub-agent must checkpoint instead of inferring permission from prose.
-
-## Investigator packet extensions
-
-`investigator` packets may add:
+Investigator packet extensions:
 
 - `commandsOrSearchTargets`
 - `evidenceQuestions`
 
-## Implementer packet extensions
-
-`implementer` packets may add:
+Implementer packet extensions:
 
 - `targetFilesOrSymbols`
 - `changeConstraints`
 - `validationPlan`
 
-## Output schema expectations
+## Required sub-agent output envelope
 
-Sub-agent outputs are schema-first but tolerant.
+All sub-agent responses should return:
 
-All sub-agent responses should use this shared envelope:
+```json
+{
+    "taskId": "tsk_042",
+    "status": "completed",
+    "confidence": "high",
+    "summary": "Checked scaffold and prepared apply decision",
+    "rolePayload": {},
+    "memoryDelta": {},
+    "blockers": [],
+    "nextAction": "Ask for apply approval",
+    "compressionNote": "No extra context required",
+    "budgetStatus": "within-budget"
+}
+```
 
-- `taskId`
-- `status`: `completed`, `checkpoint`, `blocked`, or `failed`
-- `confidence`: `low`, `medium`, or `high`
-- `summary`
-- `rolePayload`: role-specific findings, changes, or validation detail
-- `memoryDelta`
-- `blockers`
-- `nextAction`
-- `compressionNote`
-- `budgetStatus`
+Allowed enums:
 
-Sub-agent memory deltas may also include `OperationalFacts` for environment and tooling discoveries that affect future command choice.
+- `status`: `completed`, `checkpoint`, `blocked`, `failed`
+- `confidence`: `low`, `medium`, `high`
 
-If a sub-agent discovers durable team-useful knowledge, it should return that as a memory delta or promotion candidate. The `orchestrator` records promotion candidates in task state or closure. It writes committed `.agents/knowledge/**` entries only during an explicit curation/update flow or when `knowledgePromotionAllowed` is true.
+`memoryDelta` may include `OperationalFacts` and promotion candidates.
 
-## Packet sizing guidance
+## Budget guidance
 
-Budget modes:
+- `micro`: trivial one-file/symbol work; usually no persistent task state.
+- `lean`: small inspection, one bounded change or validation.
+- `standard`: multi-step work requiring delegation and independent validation.
+- `deep`: ambiguous or high-blast-radius work.
 
-- `micro`
-- `lean`
-- `standard`
-- `deep`
+`deep` is not permission to pass full conversation history.
 
-Default interpretation:
+## Scope and checkpoint guidance
 
-- `micro`: trivial or one-file/symbol work; usually no persistent task state
-- `lean`: small repo inspection, one bounded change or validation
-- `standard`: multi-step work that needs task state, delegation, or independent validation
-- `deep`: ambiguous architecture, multi-slice work, repeated failure, or high blast radius
+Good packets specify named targets, explicit constraints, concrete acceptance criteria, and clear out-of-scope boundaries.
 
-Use the lightest mode compatible with correctness. `deep` is not a license to dump the full conversation into the packet.
+Sub-agents should `checkpoint` when:
 
-## Scope discipline rules
-
-Good packets specify:
-
-- named files/symbols or narrow subsystem scope
-- explicit constraints
-- concrete acceptance criteria
-- clear out-of-scope boundaries
-
-If the true required scope is broader than the packet, the sub-agent should checkpoint rather than stretching the packet silently.
-
-## Checkpoint policy
-
-Sub-agents should checkpoint when:
-
-- scope breach triggers fire
-- contradictory evidence suggests the wrong workflow
-- required command risk tier exceeds authorization
-- the packet is missing critical information
-- blast radius appears much higher than expected
-
-Checkpoint responses should stay small and decision-oriented.
-
-## User request handling
-
-Sub-agents should not receive the full raw user request by default.
-
-Instead they receive:
-
-- normalized objective
-- bounded scope
-- relevant context slice
-- acceptance criteria
-- constraints
-
-A short excerpt of original user wording may be included when product nuance matters.
+- true scope exceeds authorized scope
+- required risk tier exceeds authorization
+- packet is missing critical information
+- contradictory evidence suggests wrong workflow
+- blast radius is materially higher than expected
 
 ## Relationship to memory
 
-Packets are scoped instructions derived from canonical memory. They are not canonical memory themselves.
+Packets are scoped instructions derived from canonical memory; they are not canonical memory.
 
-When relevant, the `orchestrator` may include a small slice of current `OperationalFacts` in the relevant context so sub-agents avoid retrying tools that have already failed in the same task/environment.
+Include only the smallest relevant context slice, including current `OperationalFacts` when needed to avoid repeating failed command choices.

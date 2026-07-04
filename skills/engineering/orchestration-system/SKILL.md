@@ -5,6 +5,8 @@ description: Set up, inspect, or govern a repo-scoped multi-agent orchestration 
 
 This skill defines a reusable orchestration system for repo-scoped engineering work. It governs the relationship between the public `orchestrator`, the internal `investigator` and `implementer`, and the repo-local `.agents/` artifacts they rely on.
 
+This file is the canonical entrypoint for orchestration policy. Agent prompts should load this file first, then pull the linked docs as needed.
+
 Use this skill when:
 
 - the user wants to set up the orchestration system in a repo
@@ -27,6 +29,8 @@ Do not use this skill when:
 6. Stop before mutating committed shared artifacts without confirmation.
 
 ## Source documents
+
+Normative runtime docs:
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [RUNTIME-CONTRACT.md](./RUNTIME-CONTRACT.md)

@@ -23,6 +23,11 @@ They may not:
 - redefine task lifecycle semantics
 - broaden scope without an explicit orchestrator decision
 
+Exception for issue-planning advisors:
+
+- `to-prd` and `to-issues` may perform issue-tracker publication only when the orchestrator explicitly authorizes that side effect for the current task and has a valid user approval context for repo-visible mutation.
+- Without that authorization context, these skills must return draft artifacts only.
+
 All advisor outputs must be translated by the `orchestrator` into:
 
 - canonical memory updates
@@ -30,26 +35,34 @@ All advisor outputs must be translated by the `orchestrator` into:
 - bounded task packets
 - user-facing decisions or clarification questions
 
+When publication is authorized for `to-prd`/`to-issues`, the orchestrator still owns memory updates, lifecycle transitions, and post-publication task decisions.
+
 ## Approved v1 advisor set
 
 ### Clarification
+
 - `grill-me`
 - `grill-with-docs` when repo language/docs materially matter
 
 ### Diagnosis
+
 - `diagnose`
 
 ### Specification / decomposition
+
 - `to-prd`
 - `to-issues`
 
 ### Implementation discipline
+
 - `tdd`
 
 ### Review / quality
+
 - `review`
 
 ### Specialist guidance
+
 Only when domain-triggered, for example:
 
 - accessibility

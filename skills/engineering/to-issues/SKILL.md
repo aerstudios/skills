@@ -31,7 +31,9 @@ Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an
 - Prefer many thin slices over few thick ones
 </vertical-slice-rules>
 
-### 4. Quiz the user
+### 4. Validate breakdown with user if needed
+
+Run this step only when uncertainty remains and user input would materially change the breakdown.
 
 Present the proposed breakdown as a numbered list. For each slice, show:
 
