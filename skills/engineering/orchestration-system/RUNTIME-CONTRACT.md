@@ -41,6 +41,15 @@ If they are:
 - outdated: warn and offer update
 - current: continue
 
+Root resolution: nearest enclosing git root, else current working directory with explicit user confirmation before scaffolding there. Bootstrap creates only this minimal scaffold; do not invent larger repo-local structures ad hoc.
+
+Preferred mechanism is the installed deterministic script, run `check` before `apply`:
+
+- `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check`
+- `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply`
+
+`check` is risk tier 0 in scope. `apply` is risk tier 2 and requires a packet with `maxRiskTier: 2`+ and a concrete `userApprovalReference`, unless the user's direct request already asked to bootstrap/repair this repo. If `check` reports missing or partial, stay `blocked` until the user approves `apply` or explicitly defers bootstrap for this task, and send a compact status update (status, recommended action, one approval question) before any other work.
+
 ## Memory invariants
 
 - Canonical memory is orchestrator-owned.
