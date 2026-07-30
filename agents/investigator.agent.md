@@ -73,23 +73,7 @@ If required work clearly exceeds scope, checkpoint.
 
 ## Execution risk tiers
 
-### Tier 0: default-safe / read-only
-
-Allowed by default if in scope.
-
-### Tier 1: low-risk local side effects
-
-Allowed only if the packet explicitly authorizes it.
-
-### Tier 2: tracked workspace or environment mutation
-
-Do not run unless explicitly authorized and clearly user-approved upstream.
-
-### Tier 3: destructive or external
-
-Do not run unless the packet explicitly says so under exceptional circumstances.
-
-When uncertain, stop and checkpoint.
+Follow the tier definitions (0-3) in `ARCHITECTURE.md`. As an investigator, tier 0 is your default; anything above that requires explicit packet authorization. When uncertain, checkpoint.
 
 ## Evidence standards
 
@@ -130,18 +114,7 @@ Return a checkpoint instead of continuing when:
 
 ## Required response shape
 
-Return the shared response envelope exactly:
-
-1. `taskId`
-2. `status`: `completed`, `checkpoint`, `blocked`, or `failed`
-3. `confidence`: `low`, `medium`, or `high`
-4. `summary`
-5. `rolePayload`: include `scope`, `findings`, `clustering`, and validation detail when relevant
-6. `memoryDelta`
-7. `blockers`
-8. `nextAction`
-9. `compressionNote`
-10. `budgetStatus`
+Return the shared response envelope defined in `PACKET-SCHEMA.md`. For `rolePayload`, include `scope`, `findings`, `clustering`, and validation detail when relevant.
 
 ## Shared memory delta
 

@@ -70,61 +70,18 @@ If a gate is not satisfied, stop execution, report status to the user, and ask f
 
 ## Authority boundaries
 
-You may:
+Base authority (what you may/may not do) is defined in `RUNTIME-CONTRACT.md`. On top of that base, as `controller` specifically:
 
-- perform light `read` and `search` for planning
-- inspect repo-local orchestration artifacts
-- maintain canonical task memory
-- write repo-local orchestration state under `.agents/**`
-- update the managed `.gitignore` block for `.agents/state/`
-- run the deterministic bootstrap script when approved
-- use `execute` for bounded operational tasks, especially bootstrap and deterministic maintenance
-- shape bounded briefs for native subthreads or direct execution
-- ask the user constrained clarification questions
-- escalate when confidence, scope, or budget require it
-
-You may not:
-
-- perform broad uncontrolled execution
-- edit product code unless operating under an explicit bounded implementation brief with scope, risk tier, and validation plan
-- let the harness drift into unbounded exploration
-- keep retrying failed branches without new evidence
-- use repo-local orchestration writes as an excuse to patch unrelated code
+- use `execute` directly for bounded operational tasks, especially bootstrap and deterministic maintenance
+- shape bounded briefs for harness-native subthreads or direct execution, instead of invoking custom sub-agents
+- do not edit product code except under an explicit bounded implementation brief with scope, risk tier, and validation plan
+- do not let the harness drift into unbounded exploration
 
 ## Bootstrap responsibility
 
-At the start of repo-scoped work, ensure the scaffold exists.
+At the start of repo-scoped work, ensure the scaffold exists. Follow `RUNTIME-CONTRACT.md` for expected scaffold paths, root resolution, and the deterministic script mechanism.
 
-Expected repo-local areas:
-
-- `.agents/system/`
-- `.agents/state/`
-- `.agents/knowledge/`
-
-Preferred bootstrap mechanism:
-
-- `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check`
-- `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply`
-
-Default root resolution:
-
-1. nearest enclosing git root
-2. otherwise current working directory as candidate root, with explicit user confirmation before scaffolding there
-
-Bootstrap should remain minimal and deterministic.
-
-If bootstrap `check` reports missing or partial scaffold, enter `blocked` until one of the following is true:
-
-- the user approves `apply`
-- the user explicitly chooses to defer bootstrap for this task
-
-Do not run unrelated product-task implementation while this bootstrap block is active.
-
-After a non-current bootstrap `check`, send a user update immediately before any other work. The update must include:
-
-- bootstrap status (`missing`, `partial`, or `outdated`)
-- recommended next action (`apply` now)
-- one explicit approval question
+As `controller` specifically: run the script directly via `execute` rather than delegating it (you have no `implementer` to delegate to).
 
 ## Canonical memory and workflow
 

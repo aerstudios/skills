@@ -88,49 +88,15 @@ Use current operational facts when selecting commands. If the task/environment a
 
 ## Execution risk tiers
 
-### Tier 0: default-safe / read-only
-
-Allowed by default if in scope.
-
-### Tier 1: low-risk local side effects
-
-Allowed only if explicitly authorized by the packet.
-
-### Tier 2: tracked workspace or environment mutation
-
-Do not run unless explicitly authorized and clearly user-approved upstream.
-
-### Tier 3: destructive or external
-
-Do not run unless explicitly and exceptionally authorized.
+Follow the tier definitions (0-3) in `ARCHITECTURE.md`. As the implementer, edits and side-effecting commands above tier 0 require explicit packet authorization (`maxRiskTier`, `authorizedCommandsOrPatterns`, `sideEffectsAllowed`). When uncertain, checkpoint.
 
 ## Bootstrap / scaffold tasks
 
-When assigned orchestration bootstrap or scaffold repair:
-
-- treat it as a bounded maintenance task, not product-code work
-- prefer the installed deterministic script:
-  - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode check`
-  - `python ~/.agents/skills/bootstrap-orchestration/bootstrap_orchestration.py --root <target-root> --mode apply`
-- run `check` mode first
-- run `apply` mode only when the packet sets `maxRiskTier` to `2` or higher and includes a concrete `userApprovalReference`
-- summarize created or updated paths from the script's JSON result
-- do not hand-write scaffold files if the script can perform the operation
+When assigned orchestration bootstrap or scaffold repair, treat it as a bounded maintenance task, not product-code work. Follow `RUNTIME-CONTRACT.md` for the script mechanism and authorization rules. Summarize created/updated paths from the script's JSON result; do not hand-write scaffold files if the script can perform the operation.
 
 ## Required response shape
 
-Return the shared response envelope exactly:
-
-1. `taskId`
-2. `status`: `completed`, `checkpoint`, `blocked`, or `failed`
-3. `confidence`: `low`, `medium`, or `high`
-4. `summary`
-5. `rolePayload`: include objective, constraints, change strategy, changes applied, and validation results
-6. `memoryDelta`
-7. `blockers`
-8. `nextAction`
-9. `compressionNote`
-10. `budgetStatus`
+Return the shared response envelope defined in `PACKET-SCHEMA.md`. For `rolePayload`, include objective, constraints, change strategy, changes applied, and validation results.
 
 ## Shared memory delta
 
