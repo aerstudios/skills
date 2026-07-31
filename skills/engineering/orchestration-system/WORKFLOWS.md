@@ -20,7 +20,7 @@ Selection is based on:
 - need for repo inspection
 - expected blast radius
 - whether the task is diagnostic, implementation, review, or planning
-- whether existing memory or knowledge already narrows the problem
+- whether existing memory or knowledge already narrows the problem — check relevant Serena memories before doing fresh investigation
 - whether a specialized advisor workflow would materially reduce uncertainty
 
 The `orchestrator` may override the default workflow choice when:
@@ -41,7 +41,7 @@ All workflows must respect these rules:
 - clarification is used only when inspection cannot cheaply resolve the uncertainty and the answer would materially change the plan, artifact, or validation strategy
 - default validation is affected-surface, not repo-wide
 - no more than 2 fix/validate loops per cluster before escalation
-- durable team-useful discoveries are promoted automatically into `.agents/knowledge/**` when stable enough; useful but unstable discoveries remain promotion candidates in closure
+- durable team-useful discoveries are promoted automatically into Serena memory (codebase/architecture facts) or `.agents/knowledge/**` (orchestration-process facts) when stable enough; useful but unstable discoveries remain promotion candidates in closure
 
 ## Workflow 1: clarify → plan
 
@@ -80,7 +80,7 @@ All workflows must respect these rules:
 ### Typical steps
 
 1. perform layered reconnaissance
-2. consult relevant repo knowledge entries if available
+2. consult relevant Serena memories and `.agents/knowledge/**` entries if available
 3. if uncertainty remains and evidence requires execution, delegate a bounded `investigator` packet
 4. collect findings into evidence, candidate scope, and initial blast radius
 5. choose the cheapest next workflow

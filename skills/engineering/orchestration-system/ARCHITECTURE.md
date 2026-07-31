@@ -156,17 +156,24 @@ Written by:
 
 ## `.agents/knowledge/`
 
-Committed curated knowledge.
-
-Contains:
-
-- durable repo-level conventions, hazards, ownership facts, and validation rules
+Committed curated knowledge, scoped narrowly to **orchestration-process** facts: which workflow tends to fit which request shape in this repo, model-routing outcomes, budget-mode tuning, and delegation heuristics that are specific to running this orchestration system in this repo.
 
 Written by:
 
 - humans or explicit curation flows
 - approved knowledge-promotion flows where the git diff is the review gate
 - not by ordinary runtime task execution in v1
+
+### Relationship to Serena memories
+
+Codebase and architecture knowledge — conventions, build/test setup, module ownership, hazards, and validation rules that live in the *product code* rather than the orchestration process — belongs in Serena's project memories (`.serena/memories/**`), not in `.agents/knowledge/**`.
+
+Rule of thumb before writing a promotion candidate:
+
+- "this is a fact about the codebase" (e.g. "auth module owns session refresh", "run `pnpm test:auth` for auth changes") → propose it as a Serena memory update
+- "this is a fact about how to run orchestration in this repo" (e.g. "feature-decomposition workflow underperforms here, prefer specify→decompose→execute with a smaller slice size") → propose it for `.agents/knowledge/**`
+
+Do not duplicate the same fact in both places. If Serena memories already exist and are current, prefer reading them over re-deriving the same knowledge through fresh investigation.
 
 ## Memory architecture
 

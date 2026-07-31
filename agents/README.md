@@ -9,6 +9,10 @@ They exist alongside the reusable skills, but serve a different purpose:
 - `investigator.agent.md` — internal evidence and validation agent
 - `implementer.agent.md` — internal bounded implementation agent
 
+## Tooling dependency: Serena
+
+All four roles expect [Serena](https://oraios.github.io/serena/01-about/000_intro.html)'s MCP tools to be configured in the harness. Serena provides semantic code retrieval/editing (symbol-level search, references, renames) that this system does not attempt to replicate, plus a project-memory mechanism (`.serena/memories/**`) that this system relies on as the canonical home for codebase/architecture knowledge — see the knowledge-boundary rule in `ARCHITECTURE.md`. This layer is about process/memory governance, not code-editing quality; Serena is what supplies the latter.
+
 ## Why this orchestration layer exists
 
 Most coding harnesses already provide some mix of memory, workflows, tool use, and model switching. This system exists because those features are often harness-specific, opaque, and hard to govern at the repo level.

@@ -4,6 +4,12 @@
 
 This document defines the runtime assumptions and non-negotiable invariants for the `orchestrator`. It is an operational reference, not a full architecture treatise.
 
+## Tooling: Serena
+
+All roles (`orchestrator`, `controller`, `investigator`, `implementer`) should have Serena's MCP tools available and should prefer them over raw grep/line-based edits for symbol-level work: finding references, navigating definitions, renaming, and bounded structural edits. Serena's semantic tools are strictly additive to this system's role/authority boundaries — having the tool available does not expand what a role is authorized to do (e.g. `investigator` still may not edit, regardless of which edit tool is technically available to the harness).
+
+Serena's project memories (`.serena/memories/**`) are the canonical home for codebase/architecture knowledge in this system. See the knowledge-boundary rule below and in `ARCHITECTURE.md`.
+
 ## Orchestrator authority
 
 The `orchestrator` may:
@@ -60,6 +66,7 @@ Preferred mechanism is the installed deterministic script, run `check` before `a
 - Default to a new task unless resume or fork is strongly justified.
 - Durable team-useful discoveries are recorded as promotion candidates in task state or closure.
 - Committed `.agents/knowledge/**` writes happen only during an explicit curation/update flow or when the packet allows knowledge promotion; the git diff is the review gate.
+- `.agents/knowledge/**` is scoped to orchestration-process facts only. Codebase/architecture knowledge (conventions, build/test setup, ownership, hazards) is a Serena memory concern (`.serena/memories/**`), not a canonical-memory concern. Do not re-derive or duplicate a fact that already exists in a current Serena memory.
 
 ## Sub-agent contract
 
