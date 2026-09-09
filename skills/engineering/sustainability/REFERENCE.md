@@ -53,7 +53,7 @@ Only reach past this table when the native option genuinely can't meet a real re
 - `P3 Client-side rendering for static/build-time content`.
   Severity: `CRITICAL`.
   Detection: content that doesn't depend on runtime user state is rendered client-side instead of at build time.
-  Fix: render at build time (Astro static output) and hydrate only the interactive parts.
+  Fix: render at build time (static output) and hydrate only the interactive parts.
 - `P4 Over-hydration of interactive islands`.
   Severity: `IMPORTANT`.
   Detection: a hydration directive makes a component interactive immediately when it doesn't need to be, or at all.
