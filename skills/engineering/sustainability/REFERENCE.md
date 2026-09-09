@@ -178,7 +178,7 @@ Only reach past this table when the native option genuinely can't meet a real re
 - `M1 No baseline measurement before optimizing`.
   Severity: `IMPORTANT`.
   Detection: changes are proposed without a measured before/after (bundle size, Lighthouse score, CO2 estimate).
-  Fix: measure first. In this repo, run the local CO2/Lighthouse report (see SKILL.md) or check build output size; in other repos, use Lighthouse, WebPageTest, or a bundle analyzer.
+  Fix: measure first. If the repo provides a CO2/Lighthouse report script or CI artifact, use it; otherwise use Lighthouse, WebPageTest, or a bundle analyzer, plus build output size.
 - `M2 Impact not quantified in the report`.
   Severity: `SUGGESTION`.
   Detection: recommendations given without an estimated bytes/requests saved.
