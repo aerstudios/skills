@@ -1,7 +1,7 @@
 ---
 name: sustainability
 description: "Audit and improve web sustainability by minimizing bytes shipped, preferring native platform features over JavaScript, and reducing page weight, requests, and estimated carbon impact. Use when reviewing or optimizing page weight, bundle size, images, fonts, third-party scripts, render-blocking resources, hosting, or when the user mentions sustainability, carbon footprint, CO2, green web, page weight, or performance budgets."
-argument-hint: "Describe the surface/pages to audit, and whether you want an audit, implementation guidance, or to run the local CO2/Lighthouse report"
+argument-hint: "Describe the surface/pages to audit, and whether you want an audit, implementation guidance, or measurement guidance (e.g., Lighthouse/CO2 reporting if available)"
 ---
 
 # Sustainability
