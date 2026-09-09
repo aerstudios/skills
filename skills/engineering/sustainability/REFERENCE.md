@@ -167,7 +167,7 @@ Only reach past this table when the native option genuinely can't meet a real re
 - `H1 No CDN/edge caching for static assets`.
   Severity: `IMPORTANT`.
   Detection: static assets served from origin on every request instead of an edge cache.
-  Fix: front static assets with CloudFront (already the pattern in this repo) and check cache hit rate.
+  Fix: front static assets with a CDN/edge cache (e.g., CloudFront) and check cache hit rate.
 - `H2 Renewable/green hosting not verified`.
   Severity: `SUGGESTION`.
   Detection: the hosting provider's energy source hasn't been checked.
