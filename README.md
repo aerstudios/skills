@@ -134,6 +134,7 @@ Skills I use daily for code work.
 - **[typescript-magician](./skills/engineering/typescript-magician/SKILL.md)** — Design complex generic types, remove `any` safely, and resolve advanced TypeScript typing problems.
 - **[zoom-out](./skills/engineering/zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
 - **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route.
+- **[sustainability](./skills/engineering/sustainability/SKILL.md)** - Audit and improve web sustainability by minimizing bytes shipped, preferring native platform features over JavaScript, and reducing page weight and estimated carbon impact.
 
 ### Productivity
 
