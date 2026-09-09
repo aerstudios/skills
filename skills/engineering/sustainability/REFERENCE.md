@@ -32,7 +32,7 @@ Directional targets, not hard limits — always ground specific numbers in a mea
 | Intersection-observer for reveal-on-scroll | CSS scroll-driven animations / `@starting-style` where support allows |
 | JS-based form validation for basic checks | Native HTML validation attributes (`required`, `pattern`, `type="email"`) |
 | JS conditional styling on state/attribute | CSS `:has()`, `:is()`, attribute selectors |
-| Client-side templating for static content | Server/build-time rendering (Astro's default) |
+| Client-side templating for static content | Server/build-time rendering (static site generation / pre-rendering) |
 | Custom video/audio player chrome for basic playback | Native `<video controls>` / `<audio controls>` |
 | JS-driven responsive images | `<picture>` / `srcset` + `sizes` |
 
