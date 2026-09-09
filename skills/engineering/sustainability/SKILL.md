@@ -47,9 +47,9 @@ Produce changes/recommendations that:
    - Classify issues as `CRITICAL` (materially bloats every page load), `IMPORTANT` (meaningful, fixable waste), or `SUGGESTION` (marginal/nice-to-have).
    - Tie each recommendation to one of the three core principles.
 
-## Running the local CO2/Lighthouse report (this repo only)
+## Running the local CO2/Lighthouse report (see aerstudios-web repo)
 
-This repository ships `tools/co2-report`, the same tool `.github/workflows/co2-report.yml` runs on every PR. Running it locally is **optional** — offer it, don't run it unprompted, and skip this whole section entirely in any other codebase that has no equivalent tool.
+The aerstudios-web repo ships `tools/co2-report`, the same tool `.github/workflows/co2-report.yml` runs on every PR. Running it locally is **optional** — offer it, don't run it unprompted, and skip this whole section entirely in any other codebase that has no equivalent tool.
 
 ```bash
 yarn workspace @aer-studios-web/website-ui run build:static
