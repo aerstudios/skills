@@ -10,7 +10,7 @@ Comprehensive guidance for auditing and reducing the environmental and performan
 
 ## Byte-Budget Guidance
 
-Directional targets, not hard limits — always ground specific numbers in a measured baseline (see Measurement below) rather than asserting them from memory.
+Ground specific numbers in a measured baseline (see Measurement below) rather than asserting them from memory.
 
 - Total transferred weight per page: investigate anything well over ~500KB–1MB; the right number depends on the page's purpose.
 - JS shipped to the client: prefer under ~150KB compressed for a typical content page; more requires justification.
