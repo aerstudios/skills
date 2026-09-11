@@ -7,24 +7,36 @@
 # to npm on first run.
 set -euo pipefail
 
+# Pinned deliberately so before/after and longitudinal measurements stay
+# comparable across runs. Bump these intentionally, not automatically.
+LIGHTHOUSE_VERSION="12.6.0"
+CO2_VERSION="0.19.0"
+
 URL="${1:?Usage: measure.sh <url-to-a-running-build> [output-dir]}"
 OUT_DIR="${2:-./sustainability-report}"
 mkdir -p "$OUT_DIR"
-REPORT_JSON="$OUT_DIR/lighthouse.json"
+REPORT_JSON="$(cd "$OUT_DIR" && pwd)/lighthouse.json"
 
 echo "Auditing $URL with Lighthouse..."
-npx --yes lighthouse "$URL" \
+npx --yes "lighthouse@$LIGHTHOUSE_VERSION" "$URL" \
   --output=json \
   --output-path="$REPORT_JSON" \
   --chrome-flags="--headless=new" \
   --only-categories=performance,seo \
   --quiet
 
-npx --yes -p @tgwf/co2 node --input-type=module -e "
+# @tgwf/co2 is installed into its own throwaway project directory rather than
+# via `npx -p`, since `npx -p` only adds the temp package's bin/ to PATH — it
+# does not make the package resolvable by a separately invoked `node -e`.
+CO2_TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$CO2_TMP_DIR"' EXIT
+
+cat > "$CO2_TMP_DIR/report.mjs" <<'EOF'
 import { readFileSync } from 'node:fs';
 import { co2 } from '@tgwf/co2';
 
-const report = JSON.parse(readFileSync('$REPORT_JSON', 'utf8'));
+const reportPath = process.argv[2];
+const report = JSON.parse(readFileSync(reportPath, 'utf8'));
 const bytes = report.audits['total-byte-weight']?.numericValue;
 if (!bytes) {
   console.error('No total-byte-weight audit found in the Lighthouse report.');
@@ -34,9 +46,12 @@ if (!bytes) {
 const emissions = new co2({ model: 'swd', rating: true });
 const { total, rating } = emissions.perVisit(bytes, false);
 
-console.log(\`Transferred: \${(bytes / 1024).toFixed(1)} KB\`);
-console.log(\`Estimated CO2 per page load (non-green hosting assumed): \${total.toFixed(3)} g (grade \${rating})\`);
+console.log(`Transferred: ${(bytes / 1024).toFixed(1)} KB`);
+console.log(`Estimated CO2 per page visit (non-green hosting assumed): ${total.toFixed(3)} g (grade ${rating})`);
 console.log('If hosting is confirmed green (https://www.thegreenwebfoundation.org/green-web-check/), re-run perVisit(bytes, true) for an accurate grade.');
-"
+EOF
+
+(cd "$CO2_TMP_DIR" && npm install --no-save --no-audit --no-fund "@tgwf/co2@$CO2_VERSION" >/dev/null 2>&1)
+node "$CO2_TMP_DIR/report.mjs" "$REPORT_JSON"
 
 echo "Full Lighthouse report: $REPORT_JSON"
