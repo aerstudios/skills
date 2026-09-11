@@ -61,7 +61,7 @@ Produce changes/recommendations that:
    - Re-run the measurement from step 2 and compare against the baseline — a fix isn't verified until the number actually moved.
    - If a needed tool is missing, install it (see step 2) rather than skipping the check.
 7. Report the result.
-   - Classify each finding on the team's Boulder → Sand review scale (`BOULDER`, `ROCK`, `STONE`, `PEBBLE`, `SAND`), and use `Q` instead of a severity when you need the author's input rather than asserting a defect. See [REFERENCE.md](./REFERENCE.md) for the full scale.
+   - Classify each finding on this skill's Boulder → Sand review scale (`BOULDER`, `ROCK`, `STONE`, `PEBBLE`, `SAND`), and use `Q` instead of a severity when you need the author's input rather than asserting a defect. See [REFERENCE.md](./REFERENCE.md) for the full scale.
    - Tie each recommendation to one of the three core principles and its measured impact.
 
 ## Decision Points

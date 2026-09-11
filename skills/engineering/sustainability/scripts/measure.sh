@@ -2,15 +2,21 @@
 # Portable CO2/weight measurement for any already-running build.
 # Usage: measure.sh <url> [output-dir]
 #
-# Installs lighthouse and @tgwf/co2 on demand via npx — no project
-# package.json changes required. Requires Node >=18 and network access
-# to npm on first run.
+# Installs lighthouse on demand via npx and @tgwf/co2 via npm into a
+# throwaway temp dir — no project package.json changes required. Requires
+# Node >=18.20, network access to npm on first run, and a Chrome/Chromium
+# executable that Lighthouse can drive headlessly.
+#
+# Set GREEN_HOSTING=true if the target's hosting has been verified green
+# (https://www.thegreenwebfoundation.org/green-web-check/); defaults to
+# false (non-green), the conservative assumption.
 set -euo pipefail
 
 # Pinned deliberately so before/after and longitudinal measurements stay
 # comparable across runs. Bump these intentionally, not automatically.
 LIGHTHOUSE_VERSION="12.6.0"
 CO2_VERSION="0.19.0"
+GREEN_HOSTING="${GREEN_HOSTING:-false}"
 
 URL="${1:?Usage: measure.sh <url-to-a-running-build> [output-dir]}"
 OUT_DIR="${2:-./sustainability-report}"
@@ -36,6 +42,7 @@ import { readFileSync } from 'node:fs';
 import { co2 } from '@tgwf/co2';
 
 const reportPath = process.argv[2];
+const greenHosting = process.argv[3] === 'true';
 const report = JSON.parse(readFileSync(reportPath, 'utf8'));
 const bytes = report.audits['total-byte-weight']?.numericValue;
 if (!bytes) {
@@ -44,14 +51,16 @@ if (!bytes) {
 }
 
 const emissions = new co2({ model: 'swd', rating: true });
-const { total, rating } = emissions.perVisit(bytes, false);
+const { total, rating } = emissions.perVisit(bytes, greenHosting);
 
 console.log(`Transferred: ${(bytes / 1024).toFixed(1)} KB`);
-console.log(`Estimated CO2 per page visit (non-green hosting assumed): ${total.toFixed(3)} g (grade ${rating})`);
-console.log('If hosting is confirmed green (https://www.thegreenwebfoundation.org/green-web-check/), re-run perVisit(bytes, true) for an accurate grade.');
+console.log(`Estimated CO2 per page visit (${greenHosting ? 'green' : 'non-green'} hosting assumed): ${total.toFixed(3)} g (grade ${rating})`);
+if (!greenHosting) {
+  console.log('If hosting is confirmed green (https://www.thegreenwebfoundation.org/green-web-check/), re-run with GREEN_HOSTING=true for an accurate grade.');
+}
 EOF
 
 (cd "$CO2_TMP_DIR" && npm install --no-save --no-audit --no-fund "@tgwf/co2@$CO2_VERSION" >/dev/null 2>&1)
-node "$CO2_TMP_DIR/report.mjs" "$REPORT_JSON"
+node "$CO2_TMP_DIR/report.mjs" "$REPORT_JSON" "$GREEN_HOSTING"
 
 echo "Full Lighthouse report: $REPORT_JSON"

@@ -4,7 +4,7 @@ Guidance for auditing and reducing the environmental and performance footprint o
 
 ## Severity Levels
 
-Uses the same Boulder → Sand scale as PR review, so findings can be pasted straight into a review comment. `Q` is not a severity — use it when you need the author's input before a verdict can be given, rather than asserting a defect.
+This skill's own Boulder → Sand scale, used to classify sustainability findings consistently. `Q` is not a severity — use it when you need the author's input before a verdict can be given, rather than asserting a defect.
 
 - `BOULDER`: blocks the page from rendering/loading correctly, or is a foundational, site-wide defect (e.g. a script blocking the critical path, no compression on text assets). Must fix before merge.
 - `ROCK`: a serious, high-impact defect that isn't outright blocking but meaningfully hurts every affected page. Fix before merge where practical.
