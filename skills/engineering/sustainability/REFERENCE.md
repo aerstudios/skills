@@ -15,7 +15,7 @@ This skill's own Boulder → Sand scale, used to classify sustainability finding
 
 ## What Drives a CO2 Estimate
 
-A page's estimated CO2 per view (as computed by tools like CO2.js) comes down to two inputs, in order of how much they matter:
+A page's estimated CO2 per view (as computed by tools like CO2.js) is a model output, not a direct measurement — it also depends on the model/version in use, grid carbon intensity, caching/return-visitor assumptions, and device embodied emissions, all of which the tool fixes internally. Of what's left in your control, two levers dominate, in order of how much they matter:
 
 1. **Total bytes transferred.** By far the dominant factor — halving transferred weight roughly halves the estimate. This is why "every byte has a cost" is the most actionable lever.
 2. **Whether hosting is green.** A green-hosted site (renewable-powered, verifiable via the Green Web Foundation's green-hosting check) scores meaningfully better than the same bytes served from non-green hosting. Don't assume green hosting without checking — tools default to assuming non-green, which is the conservative choice.

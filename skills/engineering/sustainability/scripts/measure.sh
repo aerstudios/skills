@@ -45,7 +45,7 @@ const reportPath = process.argv[2];
 const greenHosting = process.argv[3] === 'true';
 const report = JSON.parse(readFileSync(reportPath, 'utf8'));
 const bytes = report.audits['total-byte-weight']?.numericValue;
-if (!bytes) {
+if (typeof bytes !== 'number') {
   console.error('No total-byte-weight audit found in the Lighthouse report.');
   process.exit(1);
 }
@@ -60,7 +60,12 @@ if (!greenHosting) {
 }
 EOF
 
-(cd "$CO2_TMP_DIR" && npm install --no-save --no-audit --no-fund "@tgwf/co2@$CO2_VERSION" >/dev/null 2>&1)
+CO2_INSTALL_LOG="$CO2_TMP_DIR/install.log"
+if ! (cd "$CO2_TMP_DIR" && npm install --no-save --no-audit --no-fund "@tgwf/co2@$CO2_VERSION") >"$CO2_INSTALL_LOG" 2>&1; then
+  echo "Failed to install @tgwf/co2@$CO2_VERSION:" >&2
+  cat "$CO2_INSTALL_LOG" >&2
+  exit 1
+fi
 node "$CO2_TMP_DIR/report.mjs" "$REPORT_JSON" "$GREEN_HOSTING"
 
 echo "Full Lighthouse report: $REPORT_JSON"
