@@ -6,15 +6,13 @@ argument-hint: "Describe the surface/pages to audit, and whether you want an aud
 
 # Sustainability
 
-Use this skill to audit, design, and remediate for digital sustainability: less code and fewer bytes, delivered efficiently, backed by real measurements rather than guesses.
-
-This skill is project-agnostic. Nothing here should assume a specific repo, build tool, or CI setup — where an example refers to one, treat it as illustrative, not a requirement.
+Use this skill to audit, design, and remediate for digital sustainability: less code and fewer bytes, delivered efficiently, without regressing functionality or accessibility.
 
 ## Core Principles
 
 Every recommendation should trace back to one of these:
 
-**Performance is sustainability.** The lowest-carbon byte is the one never sent, and the cheapest CPU cycle is the one never spent. The aim is small, efficient application code. Prefer building less for the same or better outcome over optimizing something that shouldn't exist.
+1. **Performance is sustainability.** The lowest-carbon byte is the one never sent, and the cheapest CPU cycle is the one never spent. The aim is small, efficient application code. Prefer building less for the same or better outcome over optimizing something that shouldn't exist.
 2. **Use the platform first.** Reach for native HTML and CSS before JavaScript, and before a library. Browser capability and best practice move fast — don't rely on a static list of replacements. Where a maintained platform-guidance resource is available (for example, Google Chrome's Modern Web Guidance: https://github.com/GoogleChrome/modern-web-guidance), load it with the explicit intent of preferring platform-native elements over bespoke builds, rather than pattern-matching against a fixed table.
 3. **Every byte has a cost.** JS, images, fonts, and third-party tags all cost transfer, parse/compile time, and energy. Justify every KB, not just the big ones.
 
