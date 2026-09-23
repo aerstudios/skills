@@ -71,7 +71,7 @@ Produce changes/recommendations that:
 - A third-party script is requested:
   question whether it's needed at all first; if it is, self-host or lazy-load it off the critical path — ideally proxied through a web worker (e.g. Partytown) rather than run on the main thread.
 - An image/video is large:
-  fix format, dimensions, and compression before reaching for lazy-loading as the whole fix.
+- Large image/video: lazy-loading is important but not the whole fix; fix dimension and compression as well
 - A fix would reduce weight but harm accessibility, security, or correctness:
   do not make that trade — see "What Overrides This."
 - No measurement tool exists in this project:
