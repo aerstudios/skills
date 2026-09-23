@@ -14,7 +14,7 @@ This skill is project-agnostic. Nothing here should assume a specific repo, buil
 
 Every recommendation should trace back to one of these:
 
-1. **Performance is sustainability.** The lowest-carbon byte is the one never sent, and the cheapest CPU cycle is the one never spent. Inefficient code doesn't just feel slow — it burns real energy on every device that runs it and every server that serves it. Prefer building less for the same or better outcome over optimizing something that shouldn't exist.
+**Performance is sustainability.** The lowest-carbon byte is the one never sent, and the cheapest CPU cycle is the one never spent. The aim is small, efficient application code. Prefer building less for the same or better outcome over optimizing something that shouldn't exist.
 2. **Use the platform first.** Reach for native HTML and CSS before JavaScript, and before a library. Browser capability and best practice move fast — don't rely on a static list of replacements. Where a maintained platform-guidance resource is available (for example, Google Chrome's Modern Web Guidance: https://github.com/GoogleChrome/modern-web-guidance), load it with the explicit intent of preferring platform-native elements over bespoke builds, rather than pattern-matching against a fixed table.
 3. **Every byte has a cost.** JS, images, fonts, and third-party tags all cost transfer, parse/compile time, and energy. Justify every KB, not just the big ones.
 
