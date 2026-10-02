@@ -76,7 +76,9 @@ function isUser(value: unknown): value is User {
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
-    "name" in value
+    typeof value.id === "number" &&
+    "name" in value &&
+    typeof value.name === "string"
   );
 }
 

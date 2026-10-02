@@ -359,19 +359,30 @@ type Correct<T> = {
 
 ### Losing Modifiers
 
-Remapping can lose optional/readonly modifiers:
+A mapped type over `keyof T` keeps each property's `?` and `readonly`, including when keys are remapped with `as`. Modifiers are lost when you map over a key union that isn't `keyof T` itself:
 
 ```typescript
-// Original optional modifier lost
-type Transform<T> = {
+type In = { a?: string; readonly b: number };
+
+// Keeps modifiers: new_a is optional, new_b is readonly
+type Prefixed<T> = {
   [K in keyof T as `new_${string & K}`]: T[K];
 };
 
-// Preserve optional with conditional
-type TransformPreserve<T> = {
-  [K in keyof T as `new_${string & K}`]+?: T[K];
+// Loses modifiers: a becomes required, b becomes mutable
+type Loose<T> = {
+  [K in Extract<keyof T, string>]: T[K];
 };
 ```
+
+To change modifiers on purpose, use the explicit operators. `+?` and `+readonly` add them, `-?` and `-readonly` remove them:
+
+```typescript
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+type AllRequired<T> = { [K in keyof T]-?: T[K] };
+```
+
+Don't use `+?` to "preserve" optional properties: it makes every property optional, including ones that were required.
 
 ### Infinite Recursion
 

@@ -89,7 +89,7 @@ Assertion functions throw on invalid input and narrow the type:
 ```typescript
 type ValidEmail = Opaque<string, "ValidEmail">;
 
-// Assertion function - must be declared with function, not arrow
+// Assertion function - needs an explicit type (see below)
 function assertValidEmail(email: string): asserts email is ValidEmail {
   if (!email.includes("@") || !email.includes(".")) {
     throw new Error("Invalid email format");
@@ -109,21 +109,30 @@ async function createUser(data: { email: string }): Promise<User> {
 
 ## Important: Assertion Function Syntax
 
-Assertion functions MUST be declared using the `function` keyword, not arrow functions:
+An assertion function must be declared with an explicit type. Use the `function` keyword, or an arrow function assigned to a variable with a type annotation. An unannotated arrow function fails at the call site:
 
 ```typescript
-// WRONG - arrow functions don't work with asserts
+// WRONG - the variable has no type annotation
 const assertValidEmail = (email: string): asserts email is ValidEmail => {
-  // Error: Assertions require every name in the call target to be
-  // declared with an explicit type annotation.
+  // Error when called: Assertions require every name in the call target
+  // to be declared with an explicit type annotation.
 };
 
-// CORRECT - use function declaration
+// CORRECT - function declaration
 function assertValidEmail(email: string): asserts email is ValidEmail {
   if (!email.includes("@")) {
     throw new Error("Invalid email");
   }
 }
+
+// ALSO CORRECT - arrow function with an annotated variable
+const assertValidEmailArrow: (email: string) => asserts email is ValidEmail = (
+  email
+) => {
+  if (!email.includes("@")) {
+    throw new Error("Invalid email");
+  }
+};
 ```
 
 ## Comparison: Type Predicates vs Assertion Functions
@@ -133,7 +142,7 @@ function assertValidEmail(email: string): asserts email is ValidEmail {
 | Return | `boolean` | `void` (throws on failure) |
 | Usage | In `if` statements | Standalone call |
 | Error handling | Caller handles | Function throws |
-| Syntax | Arrow or function | Must be `function` |
+| Syntax | Arrow or function | `function`, or arrow with an annotated variable |
 
 ```typescript
 // Type predicate - returns boolean, caller handles failure

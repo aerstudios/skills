@@ -236,7 +236,9 @@ function assertIsUser(value: unknown): asserts value is User {
     typeof value !== "object" ||
     value === null ||
     !("id" in value) ||
-    !("name" in value)
+    typeof value.id !== "string" ||
+    !("name" in value) ||
+    typeof value.name !== "string"
   ) {
     throw new Error("Invalid user object");
   }
@@ -251,19 +253,24 @@ function handleData(data: unknown) {
 
 ### Important: Assertion Function Syntax
 
-Must use `function` declaration, not arrow functions:
+An assertion function must be declared with an explicit type. A `function` declaration has one. An arrow function only works if the variable it's assigned to has a type annotation:
 
 ```typescript
-// Error: Assertions require every name in the call target to be
-// declared with an explicit type annotation.
+// Error at the call site: "Assertions require every name in the call
+// target to be declared with an explicit type annotation."
 const assertString = (value: unknown): asserts value is string => {
   if (typeof value !== "string") throw new Error("Not a string");
 };
 
-// Correct
+// Correct: function declaration
 function assertString(value: unknown): asserts value is string {
   if (typeof value !== "string") throw new Error("Not a string");
 }
+
+// Also correct: arrow function with an annotated variable
+const assertIsString: (value: unknown) => asserts value is string = (value) => {
+  if (typeof value !== "string") throw new Error("Not a string");
+};
 ```
 
 ## Narrowing with Opaque Types
