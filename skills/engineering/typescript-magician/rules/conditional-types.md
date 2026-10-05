@@ -113,16 +113,20 @@ type SearchParams<TConfig extends BaseRouterConfig, TRoute extends keyof TConfig
 ## Using Conditionals in Function Arguments
 
 ```typescript
-const makeRouter = <TConfig extends Record<string, { search?: string[] }>>(
+// `const` (TypeScript 5.0+) keeps ["query", "page"] as literal types, so
+// the search object's keys are checked.
+const makeRouter = <const TConfig extends Record<string, { search?: readonly string[] }>>(
   config: TConfig
 ) => {
   return {
     goTo: <TRoute extends keyof TConfig>(
       route: TRoute,
-      // Only allow search params if route has search defined
-      search?: TConfig[TRoute]["search"] extends string[]
-        ? { [K in TConfig[TRoute]["search"][number]]?: string }
-        : never
+      // A rest parameter typed as a conditional tuple makes the search
+      // argument required for routes with search fields, and forbidden
+      // for routes without them.
+      ...args: TConfig[TRoute]["search"] extends readonly string[]
+        ? [search: { [K in TConfig[TRoute]["search"][number]]?: string }]
+        : []
     ) => {
       // Implementation
     },
@@ -134,8 +138,11 @@ const router = makeRouter({
   "/search": { search: ["query", "page"] },
 });
 
-router.goTo("/"); // No search param allowed
-router.goTo("/search", { query: "test", page: "1" }); // Search params required
+router.goTo("/"); // OK: no search argument
+router.goTo("/search", { query: "test", page: "1" }); // OK
+router.goTo("/search"); // Error: the search argument is required
+router.goTo("/", { query: "test" }); // Error: "/" takes no search argument
+router.goTo("/search", { other: "x" }); // Error: unknown search field
 ```
 
 ## Filtering with Conditionals
