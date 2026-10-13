@@ -99,7 +99,9 @@ Before: a tree of function calls rendered as nested boxes. After: the same tree 
 - Use `text-xs uppercase tracking-wider` for module labels inside diagrams — they should read as schematic, not as UI.
 - The only scripts are the Tailwind CDN and the Mermaid ESM import. The report is otherwise static — no app code, no interactivity beyond Mermaid's own rendering.
 - Keep Mermaid's `securityLevel` at `"strict"`. It escapes HTML in labels and turns off click handlers, and the report needs neither.
-- Treat names and text taken from the codebase (files, modules, functions, comments) as untrusted. HTML-escape `&`, `<`, `>`, `"` and `'` before writing them into the page. In Mermaid labels, quote the text (`A["OrderHandler"]`) and write a `"` inside it as `#quot;`.
+- Treat names and text taken from the codebase (files, modules, functions, comments) as untrusted, and escape them for where they go:
+  - **In the page's HTML**, HTML-escape `&`, `<`, `>`, `"` and `'`.
+  - **In Mermaid source** (inside `<pre class="mermaid">`), the browser decodes HTML entities before Mermaid parses the diagram, so `&quot;` turns back into `"` and can end a label. Quote each label (`A["OrderHandler"]`). First replace each `"` in the text with Mermaid's `#quot;`, then HTML-escape only `&`, `<` and `>`.
 
 ## Top recommendation section
 
