@@ -1,6 +1,6 @@
 skills/personal/*
 
-.DS_STORE
+.DS_Store
 scripts/sync-agents-skills.local.sh
 node_modules
 .claude

@@ -1,7 +1,5 @@
 # Scope
 
-This repo is the set of skills I use every day. It is curated: ideas are welcome, and each one is judged against the bar below. Issues are for tracking changes to the skills. Questions and discussion go to [GitHub Discussions](https://github.com/mattpocock/skills/discussions).
-
 ## The bar
 
 An idea or feedback issue stays open only if it clears **both** parts:

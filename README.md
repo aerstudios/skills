@@ -1,7 +1,6 @@
 # Skills For Real Engineers
 
-FORKED from
-[/mattpocock/skills](https://github.com/mattpocock/skills)
+FORKED from [/mattpocock/skills](https://github.com/mattpocock/skills)
 
 Sign up to his newsletter:
 

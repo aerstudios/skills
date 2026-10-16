@@ -3,11 +3,10 @@
   "version": "1.3.1",
   "description": "A combination of own developed and Matt Pocock's agent skills for real engineering: grilling, spec/ticket flows, TDD, code review, domain modelling and more. Plug-and-play, not vibe coding.",
   "author": {
-    "name": "Matt Pocock",
-    "url": "https://www.aihero.dev"
+    "name": "Aer Studios",
+    "url": "https://github.com/aerstudios"
   },
-  "homepage": "https://www.aihero.dev/s/skills-newsletter",
-  "repository": "https://github.com/mattpocock/skills",
+  "repository": "https://github.com/aerstudios/skills",
   "license": "MIT",
   "keywords": [
     "engineering",
@@ -15,7 +14,7 @@
     "tdd",
     "code-review",
     "grilling",
-    "domain-modeling",
+    "domain-modelling",
     "productivity"
   ],
   "skills": [

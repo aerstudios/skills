@@ -21,7 +21,7 @@ Local component variables must map from global tokens and include the `-cmp-` id
 
 ## File Conventions
 
-- **Module Naming:** Must strictly use `ComponentName.module.css` or `ComponentName.module.css`.
+- **Module Naming:** Must strictly use `ComponentName.module.css` or `ComponentName.module.scss`.
 - **Encapsulation:** All component styles must be fully encapsulated within their module structure without leaking to or relying on global element selectors.
 
 ## Strict CSS vs JavaScript Boundaries

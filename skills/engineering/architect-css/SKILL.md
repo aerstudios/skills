@@ -13,14 +13,14 @@ argument-hint: "Describe the component and whether this is a new style system, a
 .container {
   /* Local component tokens mapped from global theme */
   --c-cmp-card-bg: var(--theme-surface);
-  --c-cmp-card-padding: var(--spacing-4);
+  --c-cmp-card-padding: var(--s-4);
 
   background-color: var(--c-cmp-card-bg);
   padding-block: var(--c-cmp-card-padding);
 
   /* Layout handled strictly by parent */
   display: flex;
-  gap: var(--spacing-2);
+  gap: var(--s-2);
 }
 
 .button {
